@@ -6,7 +6,27 @@ import Chat from './Chat';
 import '../styles/HomePage.css';
 import { ChatDetailsData, getChatDetails } from '../utils/ChatClientDetails';
 import { clearCacheHistory } from '../utils/CacheHistoryDetails';
+import { CallingWidgetComponent } from './Customer/widget/CallingWidgetComponent';
+import { CallAdd20Regular, Dismiss20Regular } from '@fluentui/react-icons';
+import { initializeIcons, registerIcons } from '@fluentui/react';
+import { CommunicationUserIdentifier, MicrosoftTeamsAppIdentifier } from '@azure/communication-common';
 
+const userId: CommunicationUserIdentifier = {
+  communicationUserId: '<Enter your ACS ID Here>'
+};
+
+const token =
+  '<Enter your ACE token here>';
+
+const teamsAppIdentifier: MicrosoftTeamsAppIdentifier = {
+  teamsAppId: '<Enter your Teams app id>',
+  cloud: 'public'
+};
+
+registerIcons({
+  icons: { dismiss: <Dismiss20Regular />, callAdd: <CallAdd20Regular /> }
+});
+initializeIcons();
 /**
  * HomeScreen has two states:
  * 1. Showing start chat button
@@ -71,6 +91,13 @@ export default (): JSX.Element => {
           <p className="subtitle">Chat with customer support to learn more</p>
         </div>
         {chatData && <Chat {...chatData} userId={chatData.identity} />}
+        <CallingWidgetComponent
+          widgetAdapterArgs={{
+            userId,
+            token,
+            teamsAppIdentifier
+          }}
+        />
       </div>
     );
   };
